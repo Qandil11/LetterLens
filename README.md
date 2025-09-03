@@ -1,4 +1,6 @@
 # Letter Lens UK (Android + AI)
+![Android CI](https://github.com/Qandil11/LetterLens/actions/workflows/android-ci.yml/badge.svg)
+![Server CI](https://github.com/Qandil11/LetterLens/actions/workflows/server-ci.yml/badge.svg)
 
 Scan UK official letters and get a plain-English explanation with **GOV.UK citations** and a **next-steps checklist**.  
 - **Android app:** Compose + CameraX + ML Kit (on-device OCR)  
