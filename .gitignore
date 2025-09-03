@@ -1,0 +1,10 @@
+# .gitignore (root)
+local.properties
+**/build/
+.cxx/
+*.iml
+.gradle/
+.idea/
+**/captures/
+**/google-services.json
+**/keystore*

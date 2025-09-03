@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- DEV ONLY: allow HTTP (cleartext) to any host -->
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>
