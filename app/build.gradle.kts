@@ -29,7 +29,7 @@ android {
 
     buildTypes {
             debug {
-                buildConfigField("String","LETTER_LENS_API","\"http://10.0.2.2:8080\"") // local
+                buildConfigField("String","LETTER_LENS_API","\"http://10.31.227.115:8080\"") // local
                 // or your LAN IP while testing on device
             }
             release {
