@@ -1,9 +1,11 @@
 plugins {
     application
-    kotlin("jvm") version "1.9.24"
+    kotlin("jvm")
+    kotlin("plugin.serialization")
     id("io.ktor.plugin") version "2.3.11"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
+
 
 application {
     // Using EngineMain + application.conf
