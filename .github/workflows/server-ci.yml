@@ -2,20 +2,28 @@ name: Server CI
 on:
   push: { branches: [main] }
   pull_request: { branches: [main] }
+
 jobs:
   server:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
+
       - uses: gradle/actions/setup-gradle@v3
         with:
-          cache-read-only: true      # avoids failures when cache backend hiccups
+          cache-disabled: true      # ignore cache backend issues
+        continue-on-error: true     # don't let cache hiccups fail the job
+
       - name: Build, test, fat jar
+        env:
+          PORT: 0                   # tests bind to a free port
         run: ./gradlew :server:cleanTest :server:test :server:shadowJar
+
       - uses: actions/upload-artifact@v4
         with:
           name: server-jar
