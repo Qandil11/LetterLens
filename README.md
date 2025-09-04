@@ -10,7 +10,7 @@ Scan UK official letters and get a plain-English explanation with **GOV.UK citat
 
 ## Demo
 <!-- Replace with your link -->
-- YouTube: https://youtu.be/XXXXXXXX
+- YouTube: (https://www.youtube.com/shorts/lvZbWHVL1h4)
 - APK: see GitHub Releases
 
 ## Quick start
