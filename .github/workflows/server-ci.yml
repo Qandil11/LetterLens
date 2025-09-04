@@ -16,9 +16,12 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v3
         with:
-          cache-read-only: true    # avoid failing when GitHub cache backend hiccups
+          cache-disabled: true      # ignore cache backend issues
+        continue-on-error: true     # don't let cache hiccups fail the job
 
-      - name: Build, test, and fat jar
+      - name: Build, test, fat jar
+        env:
+          PORT: 0                   # tests bind to a free port
         run: ./gradlew :server:cleanTest :server:test :server:shadowJar
 
       - uses: actions/upload-artifact@v4
