@@ -1,30 +1,38 @@
 package com.qandil.letterlens.server
 
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.server.application.*
-import io.ktor.server.engine.*
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.serialization.kotlinx.json.json
+import io.ktor.server.application.Application
+import io.ktor.server.application.call
+import io.ktor.server.application.install
+import io.ktor.server.application.log
 import io.ktor.server.netty.EngineMain
-import io.ktor.server.plugins.callloging.*      // note: "callloging" is correct package in Ktor
-import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.server.plugins.cors.routing.*
-import io.ktor.server.plugins.statuspages.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.server.plugins.callloging.CallLogging
+import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.plugins.cors.routing.CORS
+import io.ktor.server.plugins.statuspages.StatusPages
+import io.ktor.server.request.receive
+import io.ktor.server.response.respond
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.routing
+import kotlinx.serialization.Serializable
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
+import org.slf4j.event.Level
 
 // Ktor will read configuration from application.conf
 fun main(args: Array<String>) = EngineMain.main(args)
 
 // --- types, request/response -----------------------------------------------
-@kotlinx.serialization.Serializable
+@Serializable
 data class ExplainReq(val text: String, val hint: String? = null)
+
 private val log: Logger = LoggerFactory.getLogger("LetterLensClassifier")
 
-@kotlinx.serialization.Serializable
+@Serializable
 data class ExplainRes(
     val type: String,
     val deadline: String? = null,
@@ -39,13 +47,13 @@ fun Application.module() {
     install(CORS) {
         anyHost()
         allowHeader(HttpHeaders.ContentType)
-        allowMethod(HttpMethod.Post); allowMethod(HttpMethod.Get)
+        allowMethod(HttpMethod.Companion.Post); allowMethod(HttpMethod.Companion.Get)
     }
-    install(CallLogging) { level = org.slf4j.event.Level.INFO }
+    install(CallLogging) { level = Level.INFO }
     install(StatusPages) {
         exception<Throwable> { call, cause ->
             this@module.log.error("Unhandled", cause)
-            call.respond(HttpStatusCode.InternalServerError, mapOf("error" to (cause.message ?: "error")))
+            call.respond(HttpStatusCode.Companion.InternalServerError, mapOf("error" to (cause.message ?: "error")))
         }
     }
     routing {
@@ -77,6 +85,7 @@ private fun fuzzyRegex(token: String): Regex {
     val pattern = letters.map { Regex.escape(it.toString()) }.joinToString("\\W*")
     return Regex(pattern, RegexOption.IGNORE_CASE)
 }
+
 private fun hasAny(hay: String, vararg tokens: String): Boolean {
     val low = hay.lowercase()
     val flat = squash(hay)
@@ -235,4 +244,3 @@ private fun explainForType(
         }
     }
 }
-
